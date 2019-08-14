@@ -7,4 +7,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'barcode-scanner';
+
+  public isEnabled : boolean = false;
+  toggleCamera(){
+    if (this.isEnabled) {
+      this.isEnabled = false;
+    }
+    else {
+      this.isEnabled = true;
+    }
+  }
 }
