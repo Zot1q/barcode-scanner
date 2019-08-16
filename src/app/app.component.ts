@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BarcodeReaderService } from './barcode-reader.service';
 
 @Component({
   selector: 'app-root',
@@ -6,15 +7,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'barcode-scanner';
+  public title = 'barcode-scanner';
 
-  public isEnabled : boolean = false;
-  toggleCamera(){
-    if (this.isEnabled) {
-      this.isEnabled = false;
-    }
-    else {
-      this.isEnabled = true;
-    }
+  public constructor(private barcodeReader: BarcodeReaderService){
   }
+
+  public startRead() : void {
+    this.barcodeReader.startRead();
+  }
+
+  
+  
+  public get isBarcodeReaderVisible() : boolean {
+    return this.barcodeReader.isBarcodeReaderVisible;
+  }
+  
+  
 }

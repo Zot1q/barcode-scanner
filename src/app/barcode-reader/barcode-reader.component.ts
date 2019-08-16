@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BarcodeReaderService } from '../barcode-reader.service';
 
 @Component({
   selector: 'app-barcode-reader',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BarcodeReaderComponent implements OnInit {
 
-  constructor() { }
+  public constructor(private barcodeReader : BarcodeReaderService) {
+   }
 
-  ngOnInit() {
+  public ngOnInit() {
+    //StartRead();
+    this.barcodeReader.barcodeResultOb$.subscribe(
+      result => console.log('Barcode result: ' + result)
+    )
+
+
+
   }
+  //ScanBarcode()
+  //DecodeBarcode();
+  //Prop Barcode_Result
+  //Metode
+  //Metode
 
 }
