@@ -22,5 +22,4 @@ export class AppComponent {
     return this.barcodeReader.isBarcodeReaderVisible;
   }
   
-  
 }
