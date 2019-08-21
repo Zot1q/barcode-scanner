@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,30 +12,26 @@ export class BarcodeReaderService {
   }
 
   private _barcodeResultOb$ = new Subject<string>();
-  public readonly barcodeResultOb$ = this._barcodeResultOb$.asObservable();
 
-  public startRead() : void {
+  public startRead(barcodeResult: string) {
+      this._barcodeResultOb$.next(barcodeResult);
+  }
+  public stopRead() : void {
+    //TODO Stop reading barcode
+    this._barcodeResultOb$.next();
+  }
+
+  public barcodeRead(): Observable<any> {
+    return this._barcodeResultOb$.asObservable();
+  }
+
+  public isCameraScannerVisible(): void
+  {
     if (this._isBarcodeReaderVisible) {
       this._isBarcodeReaderVisible = false;
     }
     else {
       this._isBarcodeReaderVisible = true;
-      //TODO Start reading barcode
-      //scanBarcode();
-      //decodeBarcode();
-      //this.barcodeRead(IndtastResultat.toString());
     };
-
-
   }
-  public stopRead() : void {
-    //TODO Stop reading barcode
-  }
-
-
-  public barcodeRead(result: string) : void {
-    this._barcodeResultOb$.next(result);
-  }
-  
-  
 }

@@ -2,7 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "allowJs": true,
+    "module": "es2015",
+    "types": ["node"],
+    "typeRoots": [ "../node_modules/@types" ]
   },
   "files": [
     "src/main.ts",

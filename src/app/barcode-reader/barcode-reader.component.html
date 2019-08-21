@@ -1,4 +1,19 @@
-<h1>Barcode Reader Camera</h1>
+  <video muted="" autoplay="" #video id="video" playsinline="true"></video>
+    <div *ngIf="isPC">
+      <canvas #pcCanvas id="pcCanvas" width="640" height="480" style="display: none; float: bottom;"></canvas>
+    </div>
+    <div *ngIf="!isPC">
+      <canvas #mobileCanvas id="mobileCanvas" width="240" height="320" style="display: none; float: bottom;"></canvas>
+    </div>
+  
+    <script>
+      var Module = {
+        locateFile: function(s) {
+          return s;
+        }
+      };
+    </script> 
+    <script async="" src="./wasm/zxing.js"></script>
 
 <ul>
     <li>

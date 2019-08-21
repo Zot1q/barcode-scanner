@@ -5,6 +5,7 @@
   </h1>
   <img width="300" alt="Frontmatec Logo" src="../assets/icons/Frontmatec.png">
 </div>
+<div>Barcode result:  {{barcodeResult}}</div>
 <button (click)="startRead()">Toggle Camera</button>
 <div *ngIf="isBarcodeReaderVisible">
   <app-barcode-reader></app-barcode-reader>
