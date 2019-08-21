@@ -39,12 +39,17 @@ export class BarcodeReaderComponent implements OnInit {
   public ngAfterViewInit() : void {
     this.getCamera({video: true, audio: false, facingMode: 'environment'});
     // adding decode function to zxing module
-    this.startScanBarcode();
     this.decodePtr = Module.Runtime.addFunction(this.decodeCallback);
+    this.startScanBarcode();
   }
-
+  public ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+     // unsubscribe to ensure no memory leaks
+     //this.barcodeReaderService.stopRead();
+  }
   public startScanBarcode = (): void =>  {  
-    this.isPC = this.checkDeviceType();;
+    this.checkDeviceType();
     if (this.isPC) {
       this.canvas.nativeElement.style.display = 'none';
     } 
@@ -55,8 +60,6 @@ export class BarcodeReaderComponent implements OnInit {
   }
  
   public scanBarcode = (): void => {
-    this.barcode_result = "";  
-    this.barcodeReaderService.startRead(this.barcode_result);
     if (Module == null) {
       alert("Barcode Reader is not ready!");
       return;
@@ -98,7 +101,7 @@ export class BarcodeReaderComponent implements OnInit {
     console.timeEnd('decode barcode');
     console.log("error code", err);
     if (err == -2) {
-      setTimeout(this.scanBarcode, 30);
+      setTimeout(this.scanBarcode, 50);
     }
     }
      
@@ -113,7 +116,7 @@ export class BarcodeReaderComponent implements OnInit {
   }
 
   // check devices
-  public checkDeviceType = (): boolean => {
+  public checkDeviceType = (): void => {
   let deviceType;
   const sUserAgent = navigator.userAgent.toLowerCase(); 
   const bIsIpad = sUserAgent.match(/ipad/i);
@@ -132,22 +135,20 @@ export class BarcodeReaderComponent implements OnInit {
     this.isPC = true;
   }
   console.log("deviceType:" + deviceType);
-  return this.isPC;
   }
   
   public getCamera = (config:any): void =>{
     let browser = <any>navigator;
   
-      browser.getUserMedia = (browser.getUserMedia ||
+      browser.getUserMedia = browser.getUserMedia ||
         browser.webkitGetUserMedia ||
         browser.mozGetUserMedia ||
-        browser.msGetUserMedia);
+        browser.msGetUserMedia;
   
         if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
           browser.mediaDevices.getUserMedia({ video: true,  facingMode: 'environment'}).then(stream => {
               this.videoElement.nativeElement.stream = stream;   
               this.videoElement.nativeElement.srcObject = stream;
-              this.videoElement.nativeElement.play();
           });
       }
   }
