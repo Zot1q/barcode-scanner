@@ -20,7 +20,7 @@ export class BarcodeReaderComponent implements OnInit {
   @ViewChild("mobileCanvas", {static:false})
   public mobileCanvas: ElementRef;
   public mobileCtx: CanvasRenderingContext2D;
-  
+
   public barcode_result: string;
   public videoWidth = 640;
   public videoHeight = 480;
@@ -37,6 +37,8 @@ export class BarcodeReaderComponent implements OnInit {
   }
 
   public ngAfterViewInit() : void {
+    this.checkDeviceType();
+    this.getCamera();  
     // adding decode function to zxing module
     this.decodePtr = Module.Runtime.addFunction(this.decodeCallback);
     this.startScanBarcode();
@@ -45,12 +47,9 @@ export class BarcodeReaderComponent implements OnInit {
     //Called once, before the instance is destroyed.
     // stops scan loop when barcode-component visible = false
     clearTimeout(this.timerStopScan);
-    //Stops camera
     
   }
   public startScanBarcode = (): void =>  {
-    this.getCamera({video: true, audio: false, facingMode: 'environment'});  
-    this.checkDeviceType();
     if (this.isPC) {
       this.canvas.nativeElement.style.display = 'none';
     } 
@@ -137,24 +136,41 @@ export class BarcodeReaderComponent implements OnInit {
     this.isPC = true;
   }
   console.log("deviceType:" + deviceType);
-  }
+}
   
-  public getCamera = (config:any): void =>{
+  public getCamera = (): void =>{
     let browser = <any>navigator;
-  
+    let config: MediaStreamConstraints = {audio: false, video: true};
       browser.getUserMedia = browser.getUserMedia ||
         browser.webkitGetUserMedia ||
         browser.mozGetUserMedia ||
         browser.msGetUserMedia;
-  
+
+        //Checks if media device got a rear camera and then uses it as default
+        navigator.mediaDevices.enumerateDevices().then((devices: MediaDeviceInfo[])=>
+        {
+          for (const device of devices) {
+            if (/back|rear|environment/gi.test(device.label)) {
+                config = {audio: false, video: {
+                  deviceId: {
+                      exact: device.deviceId
+                  }
+                }
+              }
+              console.log(device);
+              break;
+            }
+            else{console.log(device);}
+          }
+      });
         if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
-          browser.mediaDevices.getUserMedia({ video: true,  facingMode: 'environment'}).then(stream => {
+          browser.mediaDevices.getUserMedia(config).then(stream => {
               this.videoElement.nativeElement.stream = stream;   
               this.videoElement.nativeElement.srcObject = stream;
           });
       }
   }
-  
+
   public handleError = (error) : void =>{
   console.log('Error: ', error);
   }
