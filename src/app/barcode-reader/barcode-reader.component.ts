@@ -28,7 +28,7 @@ export class BarcodeReaderComponent implements OnInit {
   public mobileVideoHeight = 320;
   public isPC: boolean = true;
   public decodePtr: any;
-
+  private timerStopScan: any;
 
   public constructor(private barcodeReaderService : BarcodeReaderService) {  
    }
@@ -37,18 +37,19 @@ export class BarcodeReaderComponent implements OnInit {
   }
 
   public ngAfterViewInit() : void {
-    this.getCamera({video: true, audio: false, facingMode: 'environment'});
     // adding decode function to zxing module
     this.decodePtr = Module.Runtime.addFunction(this.decodeCallback);
     this.startScanBarcode();
   }
   public ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-     // unsubscribe to ensure no memory leaks
-     //this.barcodeReaderService.stopRead();
+    // stops scan loop when barcode-component visible = false
+    clearTimeout(this.timerStopScan);
+    //Stops camera
+    
   }
-  public startScanBarcode = (): void =>  {  
+  public startScanBarcode = (): void =>  {
+    this.getCamera({video: true, audio: false, facingMode: 'environment'});  
     this.checkDeviceType();
     if (this.isPC) {
       this.canvas.nativeElement.style.display = 'none';
@@ -101,18 +102,19 @@ export class BarcodeReaderComponent implements OnInit {
     console.timeEnd('decode barcode');
     console.log("error code", err);
     if (err == -2) {
-      setTimeout(this.scanBarcode, 50);
+      this.timerStopScan = setTimeout(this.scanBarcode, 50);
     }
     }
      
    public decodeCallback =  (ptr, len, resultIndex, resultCount) : void => {
     let result = new Uint8Array(Module.HEAPU8.buffer, ptr, len);
     this.barcode_result = String.fromCharCode.apply(null, result);
+    //Sends barcode result to all subscribers
     this.barcodeReaderService.startRead(this.barcode_result);
     console.log(this.barcode_result);
     this.playScanCompleteSound();
     console.log("scan succeeded");
-    setTimeout(this.scanBarcode, 1000);
+    this.timerStopScan = setTimeout(this.scanBarcode, 2000);
   }
 
   // check devices
