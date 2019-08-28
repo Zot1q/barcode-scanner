@@ -1,21 +1,18 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BarcodeReaderService } from './barcode-reader.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnInit {
   public title = 'barcode-scanner';
-  private subscription : Subscription;
   public barcodeResult: string;
 
-  public constructor(private barcodeReaderService: BarcodeReaderService){
-    this.subscription = this.barcodeReaderService.barcodeRead().subscribe(barcodeResult => {     
-        this.barcodeResult = barcodeResult;
-    });
+  public constructor(private barcodeReaderService: BarcodeReaderService, private route: ActivatedRoute){
   }
 
   public startRead() : void {
@@ -23,13 +20,21 @@ export class AppComponent implements OnDestroy {
     this.barcodeReaderService.startRead("");
   }
 
-  ngOnDestroy() {
-    // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
-}
   
   public get isBarcodeReaderVisible() : boolean {
     return this.barcodeReaderService.isBarcodeReaderVisible;
   }
-  
+  ngOnInit(): void{
+    this.route.queryParams.subscribe(params => {
+    this.barcodeResult = params['barcodeResult'];
+    console.log(this.barcodeResult);
+  });
+  }
+  ngOnDestroy(): void {
+    //From the official documentation: Do I need to unsubscribe? The Router manages the observables 
+    //it provides and localizes the subscriptions. The subscriptions are cleaned up when the component 
+    //is destroyed, protecting against memory leaks, so we don't need to unsubscribe from the route 
+    //params Observable.
+  }
 }
+
