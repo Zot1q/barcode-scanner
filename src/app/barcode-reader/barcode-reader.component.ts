@@ -101,7 +101,7 @@ export class BarcodeReaderComponent implements OnInit {
     console.timeEnd('decode barcode');
     console.log("error code", err);
     if (err == -2) {
-      this.timerStopScan = setTimeout(this.scanBarcode, 50);
+      this.timerStopScan = setTimeout(this.scanBarcode, 500);
     }
     }
      
@@ -113,7 +113,7 @@ export class BarcodeReaderComponent implements OnInit {
     console.log(this.barcode_result);
     this.playScanCompleteSound();
     console.log("scan succeeded");
-    this.timerStopScan = setTimeout(this.scanBarcode, 2000);
+    this.timerStopScan = setTimeout(this.scanBarcode, 1500);
   }
 
   // check devices
@@ -158,9 +158,11 @@ export class BarcodeReaderComponent implements OnInit {
                 }
               }
               console.log(device);
+              console.log(device.label);
               break;
             }
-            else{console.log(device);}
+            else{console.log(device);
+            console.log(device.label);}
           }
       });
         if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
