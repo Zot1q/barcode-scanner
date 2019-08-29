@@ -50,6 +50,7 @@ export class BarcodeReaderComponent implements OnInit {
     
   }
   public startScanBarcode = (): void =>  {
+    this.getCamera();
     if (this.isPC) {
       this.canvas.nativeElement.style.display = 'none';
     } 
