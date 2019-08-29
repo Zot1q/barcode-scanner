@@ -26,7 +26,7 @@ export class BarcodeReaderComponent implements OnInit {
   public videoHeight = 480;
   public mobileVideoWidth = 240;
   public mobileVideoHeight = 320;
-  public isPC: boolean = true;
+  public isPC: boolean = null;
   public decodePtr: any;
   private timerStopScan: any;
 
@@ -34,14 +34,14 @@ export class BarcodeReaderComponent implements OnInit {
    }
   
   public ngOnInit() : void {
-  }
-
-  public ngAfterViewInit() : void {
     this.checkDeviceType();
-    this.getCamera();  
+    this.getCamera();
     // adding decode function to zxing module
     this.decodePtr = Module.Runtime.addFunction(this.decodeCallback);
-    this.startScanBarcode();
+  }
+
+  public ngAfterViewInit() : void {  
+    this.timerStopScan = setTimeout(this.scanBarcode, 2000);
   }
   public ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

@@ -1,8 +1,8 @@
   <video muted="" autoplay="" #video id="video" playsinline=""></video>
-    <div *ngIf="isPC">
+    <div [hidden]="isPC == true">
       <canvas #pcCanvas id="pcCanvas" width="640" height="480" style="display: none; float: bottom;"></canvas>
     </div>
-    <div *ngIf="!isPC">
+    <div [hidden]="isPC == false">
       <canvas #mobileCanvas id="mobileCanvas" width="240" height="320" style="display: none; float: bottom;"></canvas>
     </div>
   
