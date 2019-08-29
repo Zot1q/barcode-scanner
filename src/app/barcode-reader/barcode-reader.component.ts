@@ -50,7 +50,6 @@ export class BarcodeReaderComponent implements OnInit {
     
   }
   public startScanBarcode = (): void =>  {
-    this.getCamera();
     if (this.isPC) {
       this.canvas.nativeElement.style.display = 'none';
     } 
@@ -151,7 +150,7 @@ export class BarcodeReaderComponent implements OnInit {
         navigator.mediaDevices.enumerateDevices().then((devices: MediaDeviceInfo[])=>
         {
           for (const device of devices) {
-            if (/back|rear|environment/gi.test(device.label)) {
+            if (/back|rear|environment|bagside/gi.test(device.label)) {
                 config = {audio: false, video: {
                   deviceId: {
                       exact: device.deviceId
