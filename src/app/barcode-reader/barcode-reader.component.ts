@@ -158,19 +158,27 @@ export class BarcodeReaderComponent implements OnInit {
                 }
               }
               console.log(device);
-              console.log(device.label);
+              console.log(device.label + " " + device.deviceId);
+              console.log(config.video);
+              if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
+                browser.mediaDevices.getUserMedia(config).then(stream => {
+                    this.videoElement.nativeElement.stream = stream;   
+                    this.videoElement.nativeElement.srcObject = stream;
+                });
+               }
               break;
             }
             else{console.log(device);
-            console.log(device.label);}
+            console.log(device.label + " " + device.deviceId);}
           }
+          console.log(config.video);
+          if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
+            browser.mediaDevices.getUserMedia(config).then(stream => {
+                this.videoElement.nativeElement.stream = stream;   
+                this.videoElement.nativeElement.srcObject = stream;
+            });
+        }
       });
-        if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
-          browser.mediaDevices.getUserMedia(config).then(stream => {
-              this.videoElement.nativeElement.stream = stream;   
-              this.videoElement.nativeElement.srcObject = stream;
-          });
-      }
   }
 
   public handleError = (error) : void =>{
