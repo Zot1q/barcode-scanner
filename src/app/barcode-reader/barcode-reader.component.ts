@@ -20,7 +20,8 @@ export class BarcodeReaderComponent implements OnInit {
   @ViewChild("mobileCanvas", {static:false})
   public mobileCanvas: ElementRef;
   public mobileCtx: CanvasRenderingContext2D;
-
+  
+  public audioBeep = new Audio();
   public barcode_result: string;
   public videoWidth = 640;
   public videoHeight = 480;
@@ -35,6 +36,9 @@ export class BarcodeReaderComponent implements OnInit {
   
   public ngOnInit() : void {
     this.checkDeviceType();
+    //iOS safari requires a user interaction to be able to play audio, for example a button click event
+    //So when the toggle camera button is pressed the audioBeep can be played afterwards without user interaction
+    this.audioBeep.play();
     this.getCamera();
     // adding decode function to zxing module
     this.decodePtr = Module.Runtime.addFunction(this.decodeCallback);
@@ -158,7 +162,7 @@ export class BarcodeReaderComponent implements OnInit {
                 }
               }
               console.log(device);
-              console.log(device.label + " " + device.deviceId);
+              console.log(device.label + " " + device.deviceId + " " + device.groupId);
               console.log(config.video);
               if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
                 browser.mediaDevices.getUserMedia(config).then(stream => {
@@ -169,7 +173,7 @@ export class BarcodeReaderComponent implements OnInit {
               break;
             }
             else{console.log(device);
-            console.log(device.label + " " + device.deviceId);}
+            console.log(device.label + " " + device.deviceId + " " + device.groupId);}
           }
           console.log(config.video);
           if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
@@ -187,10 +191,9 @@ export class BarcodeReaderComponent implements OnInit {
 
   public playScanCompleteSound = (): void =>
   {
-    let audio = new Audio();
-    audio.src= '../assets/audio/scanner-beep.mp3'
-    audio.load();
-    audio.play();
+    this.audioBeep.src= '../assets/audio/scanner-beep.mp3'
+    //this.audioBeep.load();
+    this.audioBeep.play();
   }
 
   public playScanErrorSound = (): void =>
