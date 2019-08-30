@@ -162,7 +162,7 @@ export class BarcodeReaderComponent implements OnInit {
                 }
               }
               console.log(device);
-              console.log(device.label + " " + device.deviceId + " " + device.groupId);
+              console.log(device.label + " " + device.groupId);
               console.log(config.video);
               if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
                 browser.mediaDevices.getUserMedia(config).then(stream => {
@@ -173,7 +173,7 @@ export class BarcodeReaderComponent implements OnInit {
               break;
             }
             else{console.log(device);
-            console.log(device.label + " " + device.deviceId + " " + device.groupId);}
+            console.log(device.label + " " + device.groupId);}
           }
           console.log(config.video);
           if(browser.mediaDevices && browser.mediaDevices.getUserMedia) {
