@@ -1,15 +1,15 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
+  <h1
+    class="md-title"> Welcome to {{ title }}!
   </h1>
-  <img width="300" alt="Frontmatec Logo" src="../assets/icons/Frontmatec.png">
+  <img mat-card-sm-image alt="Frontmatec Logo" src="../assets/icons/Frontmatec.png">
 </div>
 <div>
     <app-insert-container-in-location></app-insert-container-in-location>
 </div>
-<button (click)="startRead()">Toggle Camera</button>
+<button mat-raised-button color="primary" (click)="startRead()">Toggle Camera</button>
 <div *ngIf="isBarcodeReaderVisible">
   <app-barcode-reader></app-barcode-reader>
 </div>
-<router-outlet></router-outlet>
+<!--<router-outlet></router-outlet>-->

@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BarcodeReaderService } from '../barcode-reader.service';
-import { interval, timer, Subscription } from 'rxjs';
 // To communicate with WASM and js glue-code from component to html view
 declare var Module: any;
 
@@ -182,7 +181,7 @@ export class BarcodeReaderComponent implements OnInit {
                 this.videoElement.nativeElement.srcObject = stream;
             });
         }
-      });
+      }).catch(this.handleError);
   }
 
   public handleError = (error) : void =>{
